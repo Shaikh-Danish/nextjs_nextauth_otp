@@ -24,7 +24,7 @@ export default function LoginForm() {
 
     setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 500);
   }
 
   return (
@@ -44,7 +44,7 @@ export default function LoginForm() {
           </CardDescription>
         </CardHeader>
 
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} role="form">
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email or Username</Label>
