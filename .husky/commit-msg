@@ -1,0 +1,25 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+
+bunx --no -- commitlint --edit "$1" || {
+  echo "
+Commit message validation failed!
+
+Please follow the Conventional Commit format:
+  <type>(<scope>): <subject>
+
+Examples:
+  feat: Add a new feature
+  fix(auth): Resolve login issue
+  docs: Update README with new instructions
+  style: Fix code formatting
+  refactor(api): Simplify API calls
+  test: Add unit tests for feature X
+  chore(deps): Update dependencies
+
+Types you can use:
+  feat, fix, docs, style, refactor, test, chore
+"
+  exit 1
+}
