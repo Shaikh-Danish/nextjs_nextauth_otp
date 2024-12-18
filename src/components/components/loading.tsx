@@ -5,16 +5,12 @@ interface LoadingProps {
 }
 
 const Loading: React.FC<LoadingProps> = ({ isVisible }) => {
+  if (!isVisible) return null;
+
   return (
-    <>
-      {isVisible ? (
-        <div className="ml-[80px]">
-          <div className={style.loader}></div>
-        </div>
-      ) : (
-        <></>
-      )}
-    </>
+    <div className="ml-[80px]" role="loading">
+      <div className={style.loader}></div>
+    </div>
   );
 };
 
