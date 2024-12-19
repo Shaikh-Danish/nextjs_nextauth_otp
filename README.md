@@ -14,10 +14,6 @@ authentication in your Next.js applications.
 - TypeScript support
 - Environment variable configuration
 
-## Prerequisites
-
-[Previous installation instructions for Bun remain the same...]
-
 ## Getting Started
 
 1. Clone the repository:
@@ -72,26 +68,3 @@ bun dev
 3. User enters OTP
 4. System verifies OTP
 5. If valid, creates authenticated session
-
-## API Routes
-
-### Authentication Endpoints
-
-```typescript
-POST /api/auth/phone-login
-  body: { phoneNumber: string }
-
-POST /api/otp/verify
-  body: { phoneNumber: string, otp: string }
-```
-
-### User Management Endpoints
-
-```typescript
-GET /api/users/:id
-PUT /api/users/:id
-DELETE /api/users/:id
-```
-
-[Previous sections for Docker Support, Development, Contributing, License remain
-the same...]
