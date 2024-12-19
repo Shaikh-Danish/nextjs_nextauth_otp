@@ -2,6 +2,7 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 import connectToMongoDatabase from '@/lib/database-connect';
+import { getUser } from '@/lib/user';
 import Otp, { OtpPurpose } from '@/models/otp';
 
 export const authOptions: NextAuthOptions = {
@@ -22,22 +23,37 @@ export const authOptions: NextAuthOptions = {
         },
       },
       authorize: async credentials => {
-        await connectToMongoDatabase();
+        try {
+          await connectToMongoDatabase();
 
-        const phoneNumber = Number(credentials?.phone);
-        const otp = Number(credentials?.otp);
+          const phoneNumber = Number(credentials?.phone);
+          const otp = Number(credentials?.otp);
 
-        const otpDocument = await Otp.verifyOtp(
-          Number(phoneNumber),
-          otp,
-          OtpPurpose.LOGIN,
-        );
+          const otpDocument = await Otp.verifyOtp(
+            Number(phoneNumber),
+            otp,
+            OtpPurpose.LOGIN,
+          );
 
-        if (!otpDocument) {
-          throw new Error('Invalid OTP');
+          console.log({ otpDocument });
+
+          if (!otpDocument) {
+            throw new Error('Invalid OTP');
+          }
+
+          const user = await getUser(phoneNumber);
+
+          if (user.status === 'not_found') {
+            throw new Error('User not found');
+          }
+
+          return {
+            id: credentials?.phone ?? '',
+            phoneNumber: credentials?.phone ?? '',
+          };
+        } catch (error: any) {
+          throw new Error(error?.message || 'Authentication failed');
         }
-
-        return { id: 'tete', _id: 'tete', phoneNumber: '8623827423' };
       },
     }),
   ],
@@ -47,18 +63,23 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      console.log({ token, user });
       if (user) {
         token.phoneNumber = user.phoneNumber;
       }
       return token;
     },
     async session({ session, token }) {
-      console.log({ session, token });
       if (session) {
         session.phoneNumber = token.phoneNumber;
       }
       return session;
+    },
+    async redirect({ url, baseUrl }) {
+      if (url.includes('error')) {
+        return baseUrl;
+      }
+
+      return url;
     },
   },
 };

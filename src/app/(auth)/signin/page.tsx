@@ -1,10 +1,12 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+
+import { useRouter } from 'next/navigation';
+
 import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 
 import Alert from '@/components/components/Alert';
 import Loading from '@/components/components/loading';
@@ -18,6 +20,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+
+import { useToast } from '@/hooks/use-toast';
+
 import { clientEnvironment } from '@/config/environment';
 
 const formSchema = z.object({
@@ -26,6 +31,7 @@ const formSchema = z.object({
 
 export default function Page() {
   const router = useRouter();
+  const { toast } = useToast();
 
   const [phoneNumber, setPhoneNumber] = React.useState(0);
   const [isError, setIsError] = React.useState(false);
@@ -42,6 +48,21 @@ export default function Page() {
     setIsLoading(true);
 
     try {
+      if (
+        typeof phoneNumber !== 'number' ||
+        phoneNumber === 0 ||
+        Number.isNaN(phoneNumber) ||
+        phoneNumber === undefined
+      ) {
+        toast({
+          title: 'Error',
+          description: 'Phone number is required',
+          variant: 'destructive',
+        });
+
+        throw new Error('Phone number is required');
+      }
+
       const response = await fetch(
         `${clientEnvironment.NEXT_PUBLIC_SERVER_URL}/api/gen-otp`,
         {
@@ -53,24 +74,31 @@ export default function Page() {
         },
       );
 
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-
       const data = await response.json();
 
-      if (!data.status) {
-        throw new Error('Invalid OTP');
+      if (data.error) {
+        throw new Error(data.error);
       }
+
+      toast({
+        title: 'OTP sent',
+        description: 'OTP sent to your phone number',
+      });
 
       router.push(`/signin/input-otp?number=${phoneNumber}`);
     } catch (error: any) {
-      console.log(error);
+      toast({
+        title: 'Error',
+        description: error?.message || 'Something went wrong',
+        variant: 'destructive',
+      });
+    } finally {
       setIsLoading(false);
     }
   }
 
   return (
+    // <div className="flex h-dvh w-dvw items-center justify-center bg-gradient-to-tr from-primary/[0.3] via-primary/[0.15] to-white p-4 lg:p-8">
     <div className="flex h-dvh w-dvw items-center justify-center p-4 lg:p-8">
       <div
         className={`mx-auto w-full flex-col justify-center space-y-6 sm:w-[400px] ${
@@ -83,42 +111,51 @@ export default function Page() {
             Enter your phone number below to login to your account
           </p>
         </div>
+
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="space-y-3"
+            role="form"
+          >
             <FormField
               control={form.control}
               name="phone_number"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-md">Phone Number</FormLabel>
+
                   <FormControl>
-                    <div className="peer-container flex flex-row-reverse">
-                      <input
-                        placeholder="Enter Phone Number"
-                        type="number"
-                        className="text-md peer block w-[100%] border-b-[2px] border-black bg-transparent py-2 outline-none focus:border-primary"
-                        onChange={event =>
-                          setPhoneNumber(Number(event.target.value))
-                        }
-                      />
-                      {/* <div className="text-md block w-[50px] border-b-[2px] border-black bg-transparent p-2 peer-focus:border-primary">
+                    {/* <div className="peer-container flex flex-row-reverse"> */}
+                    <input
+                      placeholder="Enter Phone Number"
+                      type="number"
+                      className="text-md peer block w-[100%] border-b-[2px] border-black bg-transparent p-2 outline-none focus:border-primary"
+                      onChange={event =>
+                        setPhoneNumber(Number(event.target.value))
+                      }
+                    />
+                    {/* <div className="text-md block w-[50px] border-b-[2px] border-black bg-transparent p-2 peer-focus:border-primary">
                         +91
                       </div> */}
-                    </div>
+                    {/* </div> */}
                   </FormControl>
+
                   <FormDescription></FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
             <Button
               type="submit"
-              className="block w-[100%] bg-primary py-2 text-white"
+              className="block w-[100%] bg-primary py-2 text-white shadow-xl"
             >
               Send OTP
             </Button>
           </form>
         </Form>
+
         {/* <p className="px-8 text-center text-sm text-muted-foreground">
           By clicking continue, you agree to our{' '}
           <Link

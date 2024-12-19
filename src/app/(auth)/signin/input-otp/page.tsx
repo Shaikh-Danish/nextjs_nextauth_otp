@@ -1,15 +1,15 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import React, { Suspense } from 'react';
+
 import { useRouter, useSearchParams } from 'next/navigation';
 import { signIn } from 'next-auth/react';
-import React, { Suspense } from 'react';
-import { useForm } from 'react-hook-form';
-// import { useDispatch } from 'react-redux';
-import { z } from 'zod';
 
-import Alert from '@/components/components/Alert';
-import Loading from '@/components/components/loading';
+import { useForm } from 'react-hook-form';
+
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -25,7 +25,11 @@ import {
   InputOTPSeparator,
   InputOTPSlot,
 } from '@/components/ui/input-otp';
-// import { updateUser } from '@/redux/features/user-slice';
+
+import { useToast } from '@/hooks/use-toast';
+
+import Alert from '@/components/components/Alert';
+import Loading from '@/components/components/loading';
 
 const FormSchema = z.object({
   pin: z.string().min(6, {
@@ -47,6 +51,7 @@ function PhoneSearchParams({ setPhoneNumber }: { setPhoneNumber: any }) {
 
 export default function InputOTPForm() {
   const router = useRouter();
+  const { toast } = useToast();
   //   const dispatch = useDispatch();
 
   const [isError, setIsError] = React.useState(false);
@@ -65,46 +70,37 @@ export default function InputOTPForm() {
     setIsLoading(true);
     setIsError(false);
 
-    console.log(data.pin, phoneNumber);
-
     try {
       const response = await signIn('credentials', {
         otp: data.pin,
         phone: phoneNumber,
+        redirect: false,
       });
 
-      console.log(response);
+      if (response?.error) {
+        toast({
+          title: 'Error',
+          description: response.error,
+          variant: 'destructive',
+        });
+        return;
+      }
 
-      // const response = await fetch(
-      //   `${process.env.NEXT_PUBLIC_SERVER_URL}/api/verify-otp`,
-      //   {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //     },
-      //     body: JSON.stringify({
-      //       otp: data.pin,
-      //       phone: phoneNumber,
-      //     }),
-      //   },
-      // );
-
-      // if (!response.ok) {
-      //   throw new Error('Network response was not ok');
-      // }
-
-      // const result = await response.json();
-
-      // if (result.success) {
-      // dispatch(updateUser(result.data));
-      //   router.push(`/`);
-      // } else {
-      //   throw new Error(result.message || 'OTP verification failed');
-      // }
-    } catch {
-      setIsError(true);
+      if (response?.ok) {
+        toast({
+          title: 'Success',
+          description: 'Successfully logged in!',
+        });
+        router.push(`/?number=${phoneNumber}`);
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
+      });
+    } finally {
       setIsLoading(false);
-      setTimeout(() => setIsError(false), 5000);
     }
   }
 
@@ -134,27 +130,33 @@ export default function InputOTPForm() {
                             <InputOTPSlot
                               index={0}
                               className="w-[50px] border-[1px] border-gray-400 outline-1 outline-[#DEF9C4]"
+                              data-testid="textbox"
                             />
                             <InputOTPSlot
                               index={1}
                               className="w-[50px] border-[1px] border-gray-400 outline-1 outline-[#DEF9C4]"
+                              data-testid="textbox"
                             />
                             <InputOTPSlot
                               index={2}
                               className="w-[50px] border-[1px] border-gray-400 outline-1 outline-[#DEF9C4]"
+                              data-testid="textbox"
                             />
-                            <InputOTPSeparator />
+                            <InputOTPSeparator data-testid="otp-separator" />
                             <InputOTPSlot
                               index={3}
                               className="w-[50px] border-[1px] border-gray-400 outline-1 outline-[#DEF9C4]"
+                              data-testid="textbox"
                             />
                             <InputOTPSlot
                               index={4}
                               className="w-[50px] border-[1px] border-gray-400 outline-1 outline-[#DEF9C4]"
+                              data-testid="textbox"
                             />
                             <InputOTPSlot
                               index={5}
                               className="w-[50px] border-[1px] border-gray-400 outline-1 outline-[#DEF9C4]"
+                              data-testid="textbox"
                             />
                           </div>
                         </InputOTP>
@@ -179,7 +181,7 @@ export default function InputOTPForm() {
             <div className="flex flex-col items-center justify-center">
               <p className="text-sm">Didn&apos;t Receive any code?</p>
               <p
-                className="cursor-pointer text-[14px] text-primary/[0.5] hover:text-primary"
+                className="cursor-pointer text-[14px] text-primary/[0.75] hover:text-primary"
                 onClick={() => ''}
               >
                 Resend New Code

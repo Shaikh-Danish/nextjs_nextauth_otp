@@ -1,4 +1,4 @@
-.loader {
+/* .loader {
   width: 100px;
   aspect-ratio: 1;
   padding: 10px;
@@ -39,4 +39,26 @@
   100% {
     transform: translate(0, 0);
   }
+} */
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spinner:before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  margin-top: -20px;
+  margin-left: -20px;
+  border-radius: 50%;
+  border: 4px solid #ccc;
+  border-top-color: #5766db;
+  animation: spinner 0.6s linear infinite;
 }

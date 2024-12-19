@@ -9,7 +9,7 @@ const Loading: React.FC<LoadingProps> = ({ isVisible }) => {
 
   return (
     <div className="ml-[80px]" role="loading">
-      <div className={style.loader}></div>
+      <div className={style.spinner}></div>
     </div>
   );
 };
