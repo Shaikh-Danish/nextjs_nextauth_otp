@@ -19,8 +19,8 @@ authentication in your Next.js applications.
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/nextjs-auth-template.git
-cd nextjs-auth-template
+git clone https://github.com/Shaikh-Danish/nextjs_nextauth_otp.git
+cd nextjs_nextauth_otp
 ```
 
 2. Install dependencies:
