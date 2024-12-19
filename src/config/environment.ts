@@ -18,6 +18,7 @@ const serverEnvironmentSchema = z.object({
   WHATAPP_CLOUD_API_ACCESS_TOKEN: z.string().optional(),
   WHATAPP_CLOUD_API_SENDER_PHONE_NUMBER_ID: z.string().optional(),
   WHATAPP_CLOUD_API_WABA_ID: z.string().optional(),
+  GOOGLE_SHEET_URL: z.string().optional(),
 });
 
 export const clientEnvironment = clientEnvironmentSchema.parse(process.env);

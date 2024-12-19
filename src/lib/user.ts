@@ -1,3 +1,5 @@
+import { serverEnvironment } from '@/config/environment';
+
 type UserResponse =
   | {
       status: 'success';
@@ -25,7 +27,7 @@ export async function getUser(
 ): Promise<VerifyUserResponse> {
   try {
     const response = await fetch(
-      `https://script.google.com/macros/s/AKfycbxDVvBS4188RlB0XaAura9MAb6_xJ1mPu5d8KQckzb70bbRWRuX1oh1jDxSCRNC7mS1/exec?user-number=${phoneNumber}&action=verify`,
+      `${serverEnvironment.GOOGLE_SHEET_URL}?user-number=${phoneNumber}&action=verify`,
     );
 
     if (!response.ok) {
