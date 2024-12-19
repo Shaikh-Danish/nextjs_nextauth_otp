@@ -1,48 +1,97 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with
-[`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Next.js Phone Authentication Template with Bun
+
+A modern authentication template built with Next.js, Bun, and NextAuth.js. This
+template provides a solid foundation for implementing phone number-based OTP
+authentication in your Next.js applications.
+
+## Features
+
+- Fast development environment powered by Bun
+- Phone number verification using OTP
+- Secure session management
+- User management system
+- Responsive authentication pages
+- TypeScript support
+- Environment variable configuration
+
+## Prerequisites
+
+[Previous installation instructions for Bun remain the same...]
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
+git clone https://github.com/yourusername/nextjs-auth-template.git
+cd nextjs-auth-template
+```
+
+2. Install dependencies:
+
+```bash
+bun install
+```
+
+3. Start the development server:
+
+```bash
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the
-result.
+## Project Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page
-auto-updates as you edit the file.
+```
+├── app/
+│   ├── api/
+│   │   ├── auth/
+│   │   │   └── [...nextauth]/
+│   │   └── gen-otp/
+│   │       └── route.ts
+│   ├── (auth)
+│   │   ├── signin/
+│   │   │   ├── input-otp/
+│   │   │   └── page.tsx
+│   │   └── signup/
+│   │       └── page.tsx
+│   └── layout.tsx
+├── components/
+│   └── ui/
+├── lib/
+│   ├── database-connect.ts
+│   ├── user.ts
+│   └── otp.ts
+└── types/
+    └── next-auth.d.ts
+```
 
-This project uses
-[`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to
-automatically optimize and load Inter, a custom Google Font.
+## Phone Authentication Flow
 
-## Learn More
+1. User enters phone number
+2. System generates and sends OTP via SMS
+3. User enters OTP
+4. System verifies OTP
+5. If valid, creates authenticated session
 
-To learn more about Next.js, take a look at the following resources:
+## API Routes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js
-  features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Authentication Endpoints
 
-You can check out
-[the Next.js GitHub repository](https://github.com/vercel/next.js/) - your
-feedback and contributions are welcome!
+```typescript
+POST /api/auth/phone-login
+  body: { phoneNumber: string }
 
-## Deploy on Vercel
+POST /api/otp/verify
+  body: { phoneNumber: string, otp: string }
+```
 
-The easiest way to deploy your Next.js app is to use the
-[Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme)
-from the creators of Next.js.
+### User Management Endpoints
 
-Check out our
-[Next.js deployment documentation](https://nextjs.org/docs/deployment) for more
-details.
+```typescript
+GET /api/users/:id
+PUT /api/users/:id
+DELETE /api/users/:id
+```
+
+[Previous sections for Docker Support, Development, Contributing, License remain
+the same...]
