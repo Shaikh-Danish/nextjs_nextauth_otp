@@ -35,7 +35,7 @@ interface OtpModel extends Model<IOtp> {
   ): Promise<boolean>;
   verifyOtp(
     phoneNumber: number,
-    candidateOtp: number,
+    candidateOtp: string,
     purpose: OtpPurpose,
   ): Promise<boolean>;
 }
@@ -97,33 +97,40 @@ OtpSchema.static(
     purpose: OtpPurpose,
   ): Promise<boolean> {
     try {
-      const otpDocument = await this.findOne({
-        phoneNumber,
-        purpose,
-        status: OtpStatus.PENDING,
-        expiresAt: { $gt: new Date() },
-      });
+      const document = await this.aggregate([
+        {
+          $match: {
+            phoneNumber,
+            purpose,
+            status: OtpStatus.PENDING,
+            expiresAt: { $gt: new Date() },
+          },
+        },
+        {
+          $sort: {
+            _id: -1,
+          },
+        },
+        {
+          $limit: 1,
+        },
+      ]);
 
-      if (!otpDocument) {
+      if (!document) {
         return false;
       }
+
+      const otpDocument: IOtp = document[0];
 
       otpDocument.attempts += 1;
 
       if (otpDocument.attempts >= otpDocument.maxAttempts) {
         otpDocument.status = OtpStatus.EXPIRED;
-        await otpDocument.save();
         return false;
       }
 
       const hashedCandidate = crypto
-        .pbkdf2Sync(
-          candidateOtp.toString(),
-          otpDocument.salt,
-          1000,
-          64,
-          'sha512',
-        )
+        .pbkdf2Sync(candidateOtp, otpDocument.salt, 1000, 64, 'sha512')
         .toString('hex');
 
       const isValid = hashedCandidate === otpDocument.otp;
@@ -132,7 +139,11 @@ OtpSchema.static(
         otpDocument.status = OtpStatus.VERIFIED;
       }
 
-      await otpDocument.save();
+      await this.updateOne(
+        { _id: (otpDocument as any)._id },
+        { $set: otpDocument },
+      );
+
       return isValid;
     } catch (error) {
       console.error('Error verifying OTP:', error);

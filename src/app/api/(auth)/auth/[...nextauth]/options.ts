@@ -27,15 +27,13 @@ export const authOptions: NextAuthOptions = {
           await connectToMongoDatabase();
 
           const phoneNumber = Number(credentials?.phone);
-          const otp = Number(credentials?.otp);
+          const otp = credentials?.otp;
 
           const otpDocument = await Otp.verifyOtp(
-            Number(phoneNumber),
-            otp,
+            phoneNumber,
+            otp ?? '',
             OtpPurpose.LOGIN,
           );
-
-          console.log({ otpDocument });
 
           if (!otpDocument) {
             throw new Error('Invalid OTP');
