@@ -15,7 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { clientEnvironment } from '@/config/environment';
 
 import LoginForm from '@/components/auth/LoginForm';
-import InputOtpForm from '@/components/auth/InputOtpForm';
+import InputOtpForm from '@/components/auth/inputOtpForm';
 
 export default function Page() {
   const [submitError, setSubmitError] = React.useState<string>('');

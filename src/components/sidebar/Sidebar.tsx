@@ -93,8 +93,4 @@ function Sidebar() {
   );
 }
 
-const MemoizedSidebar = React.memo(Sidebar);
-
-MemoizedSidebar.displayName = 'Sidebar';
-
-export default MemoizedSidebar;
+export default React.memo(Sidebar);

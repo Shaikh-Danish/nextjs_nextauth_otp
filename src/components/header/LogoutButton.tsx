@@ -1,5 +1,7 @@
 'use client';
 
+import React from 'react';
+
 import { useRouter } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 
@@ -51,4 +53,4 @@ function deleteAllCookies() {
   sessionStorage.clear();
 }
 
-export default LogoutButton;
+export default React.memo(LogoutButton);

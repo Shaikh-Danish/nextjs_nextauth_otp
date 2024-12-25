@@ -19,13 +19,9 @@ function Hamburger() {
       })}
       onClick={() => dispatch(toggle())}
     >
-      <Menu className="ml-3 h-[25px] w-[25px] text-gray-400 hover:text-primary" />
+      <Menu className="ml-1 h-[25px] w-[25px] text-gray-400 hover:text-primary" />
     </div>
   );
 }
 
-const MemoizedHamburger = React.memo(Hamburger);
-
-MemoizedHamburger.displayName = 'Hamburger';
-
-export default MemoizedHamburger;
+export default React.memo(Hamburger);

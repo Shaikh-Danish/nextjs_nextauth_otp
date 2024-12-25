@@ -63,8 +63,4 @@ function SidebarItem({ link, name, Icon, isExpanded }: SidebarItemProps) {
   );
 }
 
-SidebarItem.displayName = 'SidebarItem';
-
-const MemoizedSidebarItem = React.memo(SidebarItem);
-
-export default MemoizedSidebarItem;
+export default React.memo(SidebarItem);

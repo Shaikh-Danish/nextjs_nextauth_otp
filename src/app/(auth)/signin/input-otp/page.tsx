@@ -29,7 +29,7 @@ import {
 import { useToast } from '@/hooks/use-toast';
 
 import Alert from '@/components/components/Alert';
-import Loading from '@/components/components/loading';
+import Loading from '@/components/components/Loading';
 
 const FormSchema = z.object({
   pin: z.string().min(6, {

@@ -3,7 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 
-import { AuthProvider } from '@/context/auth-provider';
+import { AuthProvider } from '@/context/AuthProvider';
 
 import { Toaster } from '@/components/ui/toaster';
 

@@ -20,8 +20,4 @@ function SidebarToggle({ isExpanded }: SidebarToggleProps) {
   );
 }
 
-const MemoizedSidebarToggle = React.memo(SidebarToggle);
-
-MemoizedSidebarToggle.displayName = 'SidebarToggle';
-
-export default MemoizedSidebarToggle;
+export default React.memo(SidebarToggle);

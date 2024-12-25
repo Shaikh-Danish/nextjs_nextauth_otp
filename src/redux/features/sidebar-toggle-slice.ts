@@ -15,6 +15,7 @@ export const sidebarToggle = createSlice({
   initialState,
   reducers: {
     toggle: state => {
+      console.log('toggle', state.value);
       state.value = !state.value;
     },
   },
