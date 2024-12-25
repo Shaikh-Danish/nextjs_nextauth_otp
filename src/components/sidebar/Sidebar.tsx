@@ -5,7 +5,9 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { LayoutDashboard } from 'lucide-react';
+import { FaTruck, FaQuestion } from 'react-icons/fa6';
+import { LuLayoutDashboard } from 'react-icons/lu';
+
 import classNames from 'classnames';
 
 import SidebarItem from './SidebarItem';
@@ -14,8 +16,20 @@ const MENU = [
   {
     id: 0,
     name: 'Dashboard',
-    Icon: LayoutDashboard,
+    Icon: LuLayoutDashboard,
     link: '/',
+  },
+  {
+    id: 1,
+    name: 'Fleet Monitoring',
+    Icon: FaTruck,
+    link: '/fleet-monitoring',
+  },
+  {
+    id: 2,
+    name: 'Issue Tracking',
+    Icon: FaQuestion,
+    link: '/issue-tracking',
   },
 ];
 
@@ -29,7 +43,7 @@ function Sidebar() {
       className={classNames({
         'w-[200px]': isExpanded,
         'w-14': !isExpanded,
-        'nav transition-width duration-50 border-border-primary h-lvh border-r-[1px] bg-background':
+        'nav transition-width duration-50 h-lvh border-r-[1px] border-gray-300':
           true,
       })}
     >
