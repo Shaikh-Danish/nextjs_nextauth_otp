@@ -19,11 +19,10 @@ const MENU = [
   },
 ];
 
-// import { useAppSelector } from '@/redux/store';
+import { useAppSelector } from '@/redux/store';
 
 function Sidebar() {
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  // const isExpanded = useAppSelector(state => state.sidebarToggle.value);
+  const isExpanded = useAppSelector(state => state.sidebarToggle.value);
 
   return (
     <aside
@@ -37,13 +36,13 @@ function Sidebar() {
       <Link
         href="/"
         className={classNames({
-          'gap-1 pl-3': isExpanded,
-          'px-3': !isExpanded,
-          'flex h-14 items-center justify-start text-lg font-semibold': true,
+          'my-2 flex text-lg font-semibold': true,
+          'ml-2.5': !isExpanded,
+          'ml-3': isExpanded,
         })}
         prefetch={false}
       >
-        <Image src="/logo.jpg" alt="logo" width={150} height={150} />
+        <Image src="/logo.jpg" alt="logo" width={35} height={35} />
       </Link>
 
       <div
