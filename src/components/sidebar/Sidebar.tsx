@@ -50,13 +50,11 @@ function Sidebar() {
       <Link
         href="/"
         className={classNames({
-          'my-2 flex text-lg font-semibold': true,
-          'ml-2.5': !isExpanded,
-          'ml-3': isExpanded,
+          'my-2 ml-3.5 flex text-lg font-semibold': true,
         })}
         prefetch={false}
       >
-        <Image src="/logo.jpg" alt="logo" width={35} height={35} />
+        <Image src="/logo.jpg" alt="logo" width={27} height={27} />
       </Link>
 
       <div
