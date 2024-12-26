@@ -11,7 +11,16 @@ function FleetMonitoring() {
 
       <FleetTypesAndStats />
 
-      <FleetMonitoringTable fleets={[]} />
+      <FleetMonitoringTable
+        fleets={[
+          {
+            vehicleNumber: 'MH45ak2323',
+            vehicleType: 'MXL',
+            driverName: 'John Doe',
+            driverNumber: '9876543210',
+          },
+        ]}
+      />
     </div>
   );
 }

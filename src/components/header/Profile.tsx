@@ -15,13 +15,13 @@ function Profile() {
     <Popover>
       <PopoverTrigger asChild>
         <div className="h-7 w-7 cursor-pointer rounded-full">
-          <CircleUser className="h-7 w-7" />
+          <CircleUser className="h-6 w-6" />
         </div>
       </PopoverTrigger>
 
-      <PopoverContent className="w-56" align="end">
-        <div className="grid gap-4">
-          <div className="grid gap-2">
+      <PopoverContent className="w-[200px]" align="end">
+        <div className="grid gap-2">
+          <div className="grid gap-1">
             <LogoutButton />
           </div>
         </div>
