@@ -1,51 +1,40 @@
-'use client';
-
 import React from 'react';
 
-import { usePathname } from 'next/navigation';
+import FleetMap from '@/components/fleet-monitoring/FleetMap';
+import FleetUpdateForm from '@/components/fleet-monitoring/FleetUpdateForm';
 
-import classNames from 'classnames';
-
-import { useAppSelector } from '@/redux/store';
-
-function Page() {
-  const pathname = usePathname();
-
-  const vehicleNumber = pathname.split('/')[2];
-
-  const isExpanded = useAppSelector(state => state.sidebarToggle.value);
+async function Page({
+  params,
+  searchParams,
+}: {
+  params: Promise<{ vehicleNumber: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
+  const { vehicleNumber } = await params;
+  const { status } = await searchParams;
 
   return (
-    <div
-      className={classNames({
-        'flex h-[calc(100vh-41px)] w-full': true,
-        // 'w-[calc(100vw-200px)]': isExpanded,
-        // 'w-[calc(100vw-56px)]': !isExpanded,
-      })}
-    >
-      <div
-        className={classNames({
-          'h-full w-[25%]': true,
-        })}
-      >
+    <div className="flex h-[calc(100vh-41px)] w-full">
+      <div className="h-full w-[25%]">
         {/* <ShipmentUpdateForm
               shipment={shipment}
               updateShipment={handleUpdateShipment}
             /> */}
       </div>
-      <div
-        className={classNames({
-          'h-full w-[50%] border-x border-gray-300': true,
-        })}
-      >
-        <div>{/* <ShipmentMap positions={[position]} /> */}</div>
-        <div></div>
+      <div className="h-full w-[50%] border-x">
+        <FleetMap />
+
+        <FleetUpdateForm
+          fleet={{
+            vehicleNumber: 'MH123456',
+            status: 'available',
+            positions: [],
+            driverName: 'John Doe',
+            driverPhone: '1234567890',
+          }}
+        />
       </div>
-      <div
-        className={classNames({
-          'h-full w-[25%]': true,
-        })}
-      ></div>
+      <div className="h-full w-[25%]"></div>
     </div>
   );
 }

@@ -1,20 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 type InitialState = {
-  value: SidebarToggleState;
+  value: FleetStatus | 'all';
 };
-
-type SidebarToggleState =
-  | 'all'
-  | 'on-duty'
-  | 'enroute-for-pickup'
-  | 'at-pickup'
-  | 'in-transit'
-  | 'at-unloading'
-  | 'empty-movement'
-  | 'maintenance'
-  | 'off-duty'
-  | 'available-vehicles';
 
 const initialState = {
   value: 'all',
